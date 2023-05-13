@@ -1,5 +1,5 @@
 /* global Handlebars, utils, dataSource */ // eslint-disable-line no-unused-vars
-
+{
   ("use strict");
 
   const select = {
@@ -146,38 +146,40 @@
     }
     processOrder() {
       const thisProduct = this;
-      
+
       const formData = utils.serializeFormToObject(thisProduct.form);
       console.log("formData", formData);
-      
+
       let price = thisProduct.data.price;
-      
+
       for (let paramId in thisProduct.data.params) {
-      const param = thisProduct.data.params[paramId];
-      console.log(paramId, param);
-      
-      for (let optionId in param.options) {
-        const option = param.options[optionId];
-        console.log(optionId, option);
-      
-        if(formData[paramId] && formData[paramId].includes(optionId)) {
-          if(!option.default) {
-            price += option.price;
-          }
-        } else {
-          if(option.default) {
-            price -= option.price;
+        const param = thisProduct.data.params[paramId];
+        console.log(paramId, param);
+
+        for (let optionId in param.options) {
+          const option = param.options[optionId];
+          console.log(optionId, option);
+
+          if (formData[paramId] && formData[paramId].includes(optionId)) {
+            if (!option.default) {
+              price += option.price;
+            }
+          } else {
+            if (option.default) {
+              price -= option.price;
+            }
           }
         }
-      }
-      thisProduct.params[paramId] = {
-        label: param.label,
-        options: param.options
-      };
+        thisProduct.params[paramId] = {
+          label: param.label,
+          options: param.options,
+        };
       }
       thisProduct.priceElem.innerHTML = price;
-      }
-    const app = {
+    }
+  }
+
+  const app = {
     init: function () {
       const thisApp = this;
       console.log("*** App starting ***");
