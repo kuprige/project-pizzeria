@@ -154,11 +154,13 @@
 
       for (let paramId in thisProduct.data.params) {
         const param = thisProduct.data.params[paramId];
-        console.log(paramId, param);
+        thisProduct.data.params[paramId].options = {};
 
         for (let optionId in param.options) {
           const option = param.options[optionId];
-          console.log(optionId, option);
+          if (option.default) {
+            thisProduct.data.params[paramId].options[optionId] = true;
+          }
 
           if (formData[paramId] && formData[paramId].includes(optionId)) {
             if (!option.default) {
