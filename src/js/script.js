@@ -97,6 +97,9 @@
       thisProduct.priceElem = thisProduct.element.querySelector(
         select.menuProduct.priceElem
       );
+      thisProduct.imageWrapper = thisProduct.element.querySelector(
+        select.menuProduct.imageWrapper
+      );
     }
 
     initAccordion() {
@@ -145,39 +148,55 @@
       }
     }
     processOrder() {
-      const thisProduct = this;
+      const formData = utils.serializeFormToObject(this.form);
+      this.params = {};
+      let price = this.data.price;
 
-      const formData = utils.serializeFormToObject(thisProduct.form);
-      console.log("formData", formData);
-
-      let price = thisProduct.data.price;
-
-      for (let paramId in thisProduct.data.params) {
-        const param = thisProduct.data.params[paramId];
-        thisProduct.data.params[paramId].options = {};
+      for (let paramId in this.data.params) {
+        const param = this.data.params[paramId];
 
         for (let optionId in param.options) {
           const option = param.options[optionId];
-          if (option.default) {
-            thisProduct.data.params[paramId].options[optionId] = true;
-          }
 
-          if (formData[paramId] && formData[paramId].includes(optionId)) {
+          const optionSelected =
+            formData[paramId] && formData[paramId].includes(optionId);
+          const optionImage = this.imageWrapper.querySelector(
+            `.${classNames.menuProduct.imageWrapper} .${paramId}-${optionId}`
+          );
+
+          if (optionSelected) {
             if (!option.default) {
               price += option.price;
             }
+
+            if (!this.params[paramId]) {
+              this.params[paramId] = {
+                label: param.label,
+                options: {},
+              };
+            }
+            this.params[paramId].options[optionId] = option.label;
+
+            if (optionImage) {
+              optionImage.classList.add(classNames.menuProduct.imageVisible);
+            }
           } else {
-            if (option.default) {
-              price -= option.price;
+            if (optionImage) {
+              optionImage.classList.remove(classNames.menuProduct.imageVisible);
             }
           }
         }
-        thisProduct.params[paramId] = {
-          label: param.label,
-          options: param.options,
-        };
       }
-      thisProduct.priceElem.innerHTML = price;
+
+      this.priceSingle = price;
+      this.price = this.priceSingle * this.amountWidget.value;
+      this.priceElem.innerHTML = this.price;
+
+      const productPriceElem = this.form.querySelector(".price");
+      productPriceElem.innerHTML = this.price;
+
+      const productParamsElem = this.form.querySelector(".params");
+      productParamsElem.innerHTML = JSON.stringify(this.params);
     }
   }
 
@@ -202,7 +221,6 @@
         new Product(productData, thisApp.data.products[productData]);
       }
     },
-
     initData: function () {
       const thisApp = this;
 
