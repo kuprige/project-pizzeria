@@ -226,6 +226,7 @@
         select.widgets.amount.linkIncrease
       );
     }
+
     setValue(value) {
       const thisWidget = this;
 
@@ -245,20 +246,9 @@
 
     initActions() {
       const thisWidget = this;
-      let previousValue = thisWidget.value;
 
       thisWidget.input.addEventListener("change", function () {
         thisWidget.setValue(thisWidget.input.value);
-      });
-
-      thisWidget.input.addEventListener("input", function () {
-        const currentValue = thisWidget.input.value;
-
-        if (isNaN(currentValue)) {
-          thisWidget.input.value = previousValue;
-        } else {
-          previousValue = currentValue;
-        }
       });
 
       thisWidget.linkDecrease.addEventListener("click", function (event) {
@@ -271,6 +261,7 @@
         thisWidget.setValue(thisWidget.value + 1);
       });
     }
+
     announce() {
       const thisWidget = this;
 
