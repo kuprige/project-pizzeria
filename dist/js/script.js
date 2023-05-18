@@ -43,7 +43,7 @@
     amountWidget: {
       defaultValue: 1,
       defaultMin: 1,
-      defaultMax: 9,
+      defaultMax: 10,
     },
   };
 
@@ -235,8 +235,8 @@
       if (
         thisWidget.value !== newValue &&
         !isNaN(newValue) &&
-        newValue >= 1 &&
-        newValue <= 10
+        newValue >= settings.amountWidget.defaultMin &&
+        newValue <= settings.amountWidget.defaultMax
       ) {
         thisWidget.value = newValue;
         thisWidget.input.value = thisWidget.value;
@@ -246,19 +246,33 @@
 
     initActions() {
       const thisWidget = this;
+      let previousValue = thisWidget.value;
 
       thisWidget.input.addEventListener("change", function () {
-        thisWidget.setValue(thisWidget.input.value);
+        const newValue = parseInt(thisWidget.input.value);
+
+        if (isNaN(newValue) || newValue < 0 || newValue > 10) {
+          thisWidget.input.value = previousValue;
+        } else {
+          previousValue = newValue;
+          thisWidget.setValue(newValue);
+        }
       });
 
       thisWidget.linkDecrease.addEventListener("click", function (event) {
         event.preventDefault();
-        thisWidget.setValue(thisWidget.value - 1);
+        const newValue = thisWidget.value - 1;
+        if (newValue >= 0) {
+          thisWidget.setValue(newValue);
+        }
       });
 
       thisWidget.linkIncrease.addEventListener("click", function (event) {
         event.preventDefault();
-        thisWidget.setValue(thisWidget.value + 1);
+        const newValue = thisWidget.value + 1;
+        if (newValue <= 10) {
+          thisWidget.setValue(newValue);
+        }
       });
     }
 
@@ -269,6 +283,7 @@
       thisWidget.element.dispatchEvent(event);
     }
   }
+
   const app = {
     init: function () {
       const thisApp = this;
