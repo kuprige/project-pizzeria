@@ -275,7 +275,6 @@
         }
       });
     }
-
     announce() {
       const thisWidget = this;
 
