@@ -234,29 +234,21 @@
 
       const newValue = parseInt(value);
 
-      if (
-        thisWidget.value !== newValue &&
-        !isNaN(newValue) &&
-        newValue >= 0 &&
-        newValue <= 10
-      ) {
+      if (!isNaN(newValue) && newValue >= 0 && newValue <= 10) {
         thisWidget.value = newValue;
+      } else {
         thisWidget.input.value = thisWidget.value;
-        thisWidget.announce();
       }
+
+      thisWidget.input.value = thisWidget.value;
+      thisWidget.announce();
     }
 
     initActions() {
       const thisWidget = this;
 
       thisWidget.input.addEventListener("change", function () {
-        const newValue = thisWidget.input.value;
-
-        if (!isNaN(newValue) && newValue >= 0 && newValue <= 10) {
-          thisWidget.setValue(newValue);
-        } else {
-          thisWidget.input.value = thisWidget.value;
-        }
+        thisWidget.setValue(thisWidget.input.value);
       });
 
       thisWidget.linkDecrease.addEventListener("click", function (event) {
