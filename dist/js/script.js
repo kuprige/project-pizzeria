@@ -43,7 +43,7 @@
     amountWidget: {
       defaultValue: 1,
       defaultMin: 1,
-      defaultMax: 10,
+      defaultMax: 9,
     },
   };
 
@@ -154,6 +154,8 @@
       thisProduct.amountWidgetElem.addEventListener("updated", function () {
         thisProduct.processOrder();
       });
+
+      thisProduct.amountWidget.setValue(1);
     }
 
     processOrder() {
@@ -235,8 +237,8 @@
       if (
         thisWidget.value !== newValue &&
         !isNaN(newValue) &&
-        newValue >= settings.amountWidget.defaultMin &&
-        newValue <= settings.amountWidget.defaultMax
+        newValue >= 0 &&
+        newValue <= 10
       ) {
         thisWidget.value = newValue;
         thisWidget.input.value = thisWidget.value;
@@ -246,16 +248,14 @@
 
     initActions() {
       const thisWidget = this;
-      let previousValue = thisWidget.value;
 
       thisWidget.input.addEventListener("change", function () {
-        const newValue = parseInt(thisWidget.input.value);
+        const newValue = thisWidget.input.value;
 
-        if (isNaN(newValue) || newValue < 0 || newValue > 10) {
-          thisWidget.input.value = previousValue;
-        } else {
-          previousValue = newValue;
+        if (!isNaN(newValue) && newValue >= 0 && newValue <= 10) {
           thisWidget.setValue(newValue);
+        } else {
+          thisWidget.input.value = thisWidget.value;
         }
       });
 
