@@ -258,7 +258,6 @@
           thisWidget.setValue(newValue);
         }
       });
-
       thisWidget.linkDecrease.addEventListener("click", function (event) {
         event.preventDefault();
         const newValue = thisWidget.value - 1;
