@@ -30,10 +30,17 @@
 
 /* Form elements */
 
-input, select {
+input,
+select {
   border: 1px solid $color-dark;
   border-radius: $radius;
   padding: $base-size;
+
+  // CODE ADDED START
+  &.error {
+    border-color: $color-main;
+  }
+  // CODE ADDED END
 }
 
 .checkbox {
@@ -76,7 +83,6 @@ input, select {
       top: 4px;
       left: 3px;
     }
-
   }
 
   &:hover input ~ .checkbox__checkmark {
@@ -91,7 +97,5 @@ input, select {
     .checkbox__checkmark {
       border-radius: 50%;
     }
-
   }
-
 }

@@ -3,7 +3,7 @@
 }
 
 .product {
-  margin: ($base-size * 0.5) 0;
+  margin: ($base-size / 2) 0;
   padding: ($base-size * 6) ($base-size * 4);
   background: $color-light;
   border-bottom: 1px solid lighten($color-dark, 70%);
@@ -93,9 +93,7 @@
       &.active {
         opacity: 1;
       }
-
     }
-
   }
 
   &.active {
@@ -103,16 +101,15 @@
       @include accordion-open();
     }
 
-    .product__order, .product__images {
+    .product__order,
+    .product__images {
       opacity: 1;
     }
 
     .product__icon {
       transform: rotate(180deg);
     }
-
   }
-
 }
 
 .widget-amount {
@@ -120,8 +117,7 @@
     width: 30px;
     height: 30px;
     text-align: center;
-    margin: 0 ($base-size * 0.5);
+    margin: 0 ($base-size / 2);
     padding: 0;
   }
-
 }
