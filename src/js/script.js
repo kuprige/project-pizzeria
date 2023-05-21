@@ -390,6 +390,7 @@
       const generatedDOM = utils.createDOMFromHTML(generatedHTML);
       thisCart.dom.productList.appendChild(generatedDOM);
     }
+
     addToCart() {
       const thisProduct = this;
 
