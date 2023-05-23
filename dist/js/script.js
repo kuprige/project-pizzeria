@@ -231,7 +231,6 @@
         }
       }
       price *= thisProduct.amountWidget.value;
-
       thisProduct.priceSingle = price;
 
       thisProduct.priceElem.innerHTML = price;
@@ -250,15 +249,20 @@
       return productSummary;
     }
 
+    addToCart() {
+      const thisProduct = this;
+      app.cart.add(thisProduct);
+    }
+
     prepareCartProductParams() {
       const thisProduct = this;
 
       const formData = utils.serializeFormToObject(thisProduct.form);
+
       const params = {};
 
       for (let paramId in thisProduct.data.params) {
         const param = thisProduct.data.params[paramId];
-
         params[paramId] = {
           label: param.label,
           options: {},
@@ -267,7 +271,8 @@
         for (let optionId in param.options) {
           const option = param.options[optionId];
           const optionSelected =
-            formData[paramId] && formData[paramId].includes(optionId);
+            formData.hasOwnProperty(paramId) &&
+            formData[paramId].includes(optionId);
 
           if (optionSelected) {
             params[paramId].options[optionId] = option.label;
@@ -361,17 +366,18 @@
       thisCart.initActions();
       console.log("new Cart", thisCart);
     }
-    getElements() {
+
+    getElements(element) {
       const thisCart = this;
 
       thisCart.dom = {};
-      thisCart.dom.wrapper = document.querySelector(select.cart.wrapper);
+      thisCart.dom.wrapper = element;
       thisCart.dom.toggleTrigger = thisCart.dom.wrapper.querySelector(
         select.cart.toggleTrigger
       );
-      thisCart.dom.productList = thisCart.dom.wrapper.querySelector(
-        select.cart.productList
-      );
+      thisCart.dom = {
+        productList: document.querySelector(select.containerOf.cartProductList),
+      };
     }
 
     initActions() {
@@ -384,16 +390,14 @@
     add(menuProduct) {
       const thisCart = this;
 
-      console.log("adding product", menuProduct);
+      // Generate HTML for the product
+      const generatedHTML = templates.cartProduct(menuProduct);
 
-      const generatedHTML = menuProduct.renderInMenu();
+      // Convert HTML to DOM element
       const generatedDOM = utils.createDOMFromHTML(generatedHTML);
-      thisCart.dom.productList.appendChild(generatedDOM);
-    }
-    addToCart() {
-      const thisProduct = this;
 
-      app.cart.add(thisProduct);
+      // Add the DOM element to the product list in the cart
+      thisCart.dom.productList.appendChild(generatedDOM);
     }
   }
   const app = {
