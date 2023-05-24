@@ -241,8 +241,9 @@
       const productSummary = {
         id: thisProduct.id,
         name: thisProduct.data.name,
-        price: thisProduct.price,
+        price: thisProduct.priceSingle,
         priceSingle: thisProduct.priceSingle,
+        amount: thisProduct.amountWidget.value,
         params: thisProduct.prepareCartProductParams(),
       };
 
@@ -251,7 +252,7 @@
 
     addToCart() {
       const thisProduct = this;
-      app.cart.add(thisProduct);
+      app.cart.add(thisProduct.prepareCartProduct());
     }
 
     prepareCartProductParams() {
@@ -375,9 +376,9 @@
       thisCart.dom.toggleTrigger = thisCart.dom.wrapper.querySelector(
         select.cart.toggleTrigger
       );
-      thisCart.dom = {
-        productList: document.querySelector(select.containerOf.cartProductList),
-      };
+      thisCart.dom.productList = thisCart.dom.wrapper.querySelector(
+        select.cart.productList
+      );
     }
 
     initActions() {
