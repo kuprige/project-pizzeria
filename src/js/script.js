@@ -351,7 +351,7 @@
     announce() {
       const thisWidget = this;
 
-      const event = new Event("updated");
+      const event = new CustomEvent("updated", { bubbles: true });
       thisWidget.element.dispatchEvent(event);
     }
   }
@@ -396,6 +396,14 @@
       thisCart.dom.toggleTrigger.addEventListener("click", function () {
         thisCart.dom.wrapper.classList.toggle(classNames.cart.wrapperActive);
       });
+
+      thisCart.dom.productList.addEventListener("updated", function () {
+        thisCart.update();
+      });
+
+      thisCart.dom.productList.addEventListener("remove", function (event) {
+        thisCart.remove(event.detail.cartProduct);
+      });
     }
 
     add(menuProduct) {
@@ -418,24 +426,40 @@
     update() {
       const thisCart = this;
 
-      // Update logic for total number and subtotal price
-      let totalNumber = 0;
-      let subtotalPrice = 0;
+      thisCart.totalNumber = 0;
+      thisCart.subtotalPrice = 0;
 
       for (const product of thisCart.products) {
-        totalNumber += product.amount;
-        subtotalPrice += product.price;
+        thisCart.totalNumber += product.amount;
+        thisCart.subtotalPrice += product.price * product.amount;
       }
 
-      // Calculate the total price including delivery fee
-      let totalPrice = subtotalPrice;
-      if (totalPrice !== 0) {
-        totalPrice += settings.cart.defaultDeliveryFee;
+      thisCart.totalPrice =
+        thisCart.subtotalPrice + (thisCart.deliveryFee || 0);
+
+      thisCart.dom.totalNumber.textContent = thisCart.totalNumber;
+      thisCart.dom.subtotalPrice.textContent = thisCart.subtotalPrice;
+      thisCart.dom.totalPrice.forEach((element) => {
+        element.textContent = thisCart.totalPrice;
+      });
+      thisCart.dom.deliveryFee.textContent = thisCart.deliveryFee || 20;
+    }
+    remove(cartProduct) {
+      const thisCart = this;
+
+      // Remove the cart product from the DOM
+      cartProduct.dom.wrapper.remove();
+
+      // Find the index of the cart product in the products array
+      const productIndex = thisCart.products.indexOf(cartProduct);
+
+      // Remove the cart product from the products array
+      if (productIndex !== -1) {
+        thisCart.products.splice(productIndex, 1);
       }
 
-      console.log("Total Number:", totalNumber);
-      console.log("Subtotal Price:", subtotalPrice);
-      console.log("Total Price:", totalPrice);
+      // Update the cart totals
+      thisCart.update();
     }
   }
 
@@ -487,6 +511,17 @@
       });
 
       thisCartProduct.amountWidget.setValue(1);
+    }
+    remove() {
+      const thisCartProduct = this;
+
+      const event = new CustomEvent("remove", {
+        bubbles: true,
+        detail: {
+          cartProduct: thisCartProduct,
+        },
+      });
+      thisCartProduct.dom.wrapper.dispatchEvent(event);
     }
   }
   const app = {
