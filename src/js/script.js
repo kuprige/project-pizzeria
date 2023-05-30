@@ -505,7 +505,6 @@
         thisCartProduct.price =
           thisCartProduct.priceSingle * thisCartProduct.amount;
         thisCartProduct.dom.price.innerHTML = thisCartProduct.price;
-        thisCartProduct.processOrder();
       });
 
       thisCartProduct.amountWidget.setValue(1);
@@ -520,10 +519,7 @@
         this.remove();
       });
     }
-    processOrder() {
-      // Implementation of order processing logic
-      // ...
-    }
+
     remove() {
       const thisCartProduct = this;
 
