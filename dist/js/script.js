@@ -374,6 +374,11 @@
       const thisCart = this;
 
       thisCart.dom = {};
+      thisCart.dom.form = document.querySelector(select.cart.form);
+      thisCart.dom.phone = thisCart.dom.form.querySelector(select.cart.phone);
+      thisCart.dom.address = thisCart.dom.form.querySelector(
+        select.cart.address
+      );
       thisCart.dom.wrapper = element;
       thisCart.dom.toggleTrigger = thisCart.dom.wrapper.querySelector(
         select.cart.toggleTrigger
@@ -412,12 +417,14 @@
       });
 
       thisCart.dom.form.addEventListener("submit", function (event) {
-        event.preventDefault();
-        thisCart.sendOrder();
+        event.preventDefault(); // Zablokowanie domyślnego zachowania formularza
+        thisCart.sendOrder(); // Wywołanie metody sendOrder
       });
     }
+
     sendOrder() {
       const thisCart = this;
+
       const url = settings.db.url + "/" + settings.db.orders;
 
       const payload = {
@@ -430,11 +437,9 @@
         products: [],
       };
 
-      for (const product of thisCart.products) {
-        payload.products.push(product.getData());
+      for (let prod of thisCart.products) {
+        payload.products.push(prod.getData());
       }
-
-      console.log(payload);
 
       const options = {
         method: "POST",
@@ -464,6 +469,7 @@
       console.log("thisCart.products", thisCart.products);
       thisCart.update();
     }
+
     update() {
       const thisCart = this;
 
@@ -485,6 +491,7 @@
       });
       thisCart.dom.deliveryFee.textContent = thisCart.deliveryFee || 20;
     }
+
     remove(cartProduct) {
       const thisCart = this;
 
@@ -598,7 +605,6 @@
       console.log("templates:", templates);
 
       thisApp.initData();
-      thisApp.initMenu();
       thisApp.initCart();
     },
 
@@ -621,16 +627,17 @@
       const url = settings.db.url + "/" + settings.db.products;
 
       fetch(url)
-        .then(function (rawResponse) {
-          return rawResponse.json();
+        .then(function (response) {
+          return response.json(); // Parsowanie odpowiedzi jako JSON
         })
         .then(function (parsedResponse) {
-          console.log("parsedResponse", parsedResponse);
+          console.log(parsedResponse); // Wyświetlanie sparsowanej odpowiedzi w konsoli
+          thisApp.data.products = parsedResponse; // Przypisanie sparsowanej odpowiedzi do thisApp.data.products
+
+          // Wywołanie metody initMenu po otrzymaniu odpowiedzi z serwera
+          thisApp.initMenu();
         });
-
-      console.log("thisApp.data", JSON.stringify(thisApp.data));
     },
-
     initCart: function () {
       const cartElem = document.querySelector(select.containerOf.cart);
       this.cart = new Cart(cartElem);
