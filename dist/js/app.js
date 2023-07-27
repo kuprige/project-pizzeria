@@ -45,16 +45,15 @@ const app = {
         thisApp.initMenu();
       });
   },
-  initCart: function () {
-    const cartElem = document.querySelector(select.containerOf.cart);
-    this.cart = new Cart(cartElem);
-    const thisApp = this;
 
-    thisApp.ProductListthisApp.ProductList = document.querySelector(
-      select.containerOf.menu
-    );
-    thisApp.ProductList.addEventListener("add-to-cart", function (event) {
-      app.cart.add(event.detail.product.prepareCartProduct());
+  initCart: function () {
+    const thisApp = this;
+    const cartElem = document.querySelector(select.containerOf.cart);
+    thisApp.cart = new Cart(cartElem);
+
+    const productList = document.querySelector(select.containerOf.menu);
+    productList.addEventListener("add-to-cart", function (event) {
+      thisApp.cart.add(event.detail.product.prepareCartProduct());
     });
   },
 };
