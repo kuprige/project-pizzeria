@@ -17,6 +17,9 @@ $radius: 4px;
 
 $base-size: 12px;
 
+$color-warning: #f6b93b;
+$color-danger: #e55039;
+$color-success: #78e08f;
 /* Mixins */
 
 @mixin btn($btn-bg, $btn-text, $btn-border) {
@@ -36,15 +39,6 @@ $base-size: 12px;
   &:hover {
     background: lighten($btn-bg, 3%);
   }
-
-  // CODE ADDED START
-  &.disabled,
-  &[disabled] {
-    background: desaturate($btn-bg, 100%);
-    border-color: desaturate($btn-border, 100%);
-    cursor: not-allowed;
-  }
-  // CODE ADDED END
 }
 
 @mixin flex($flex-direction, $align-items, $justify-content) {
