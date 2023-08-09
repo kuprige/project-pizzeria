@@ -16,10 +16,10 @@ class Cart {
     const thisCart = this;
 
     thisCart.dom = {};
-    thisCart.dom.wrapper = element;
-    thisCart.dom.form = thisCart.dom.wrapper.querySelector(select.cart.form);
+    thisCart.dom.form = document.querySelector(select.cart.form);
     thisCart.dom.phone = thisCart.dom.form.querySelector(select.cart.phone);
     thisCart.dom.address = thisCart.dom.form.querySelector(select.cart.address);
+    thisCart.dom.wrapper = element;
     thisCart.dom.toggleTrigger = thisCart.dom.wrapper.querySelector(
       select.cart.toggleTrigger
     );
@@ -38,6 +38,7 @@ class Cart {
     thisCart.dom.deliveryFee = thisCart.dom.wrapper.querySelector(
       select.cart.deliveryFee
     );
+    thisCart.dom.form = thisCart.dom.wrapper.querySelector(select.cart.form);
   }
 
   initActions() {
