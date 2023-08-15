@@ -1,29 +1,41 @@
-import { select } from "../settings.js";
-import AmountWidget from "./AmountWidget.js";
+import { templates } from "../settings.js";
 
 class Booking {
   constructor(element) {
-    this.render(element);
-    this.initWidgets();
+    const thisBooking = this;
+
+    // Przypisanie referencji do kontenera do właściwości thisBooking.dom.wrapper
+    thisBooking.dom = {
+      wrapper: element,
+    };
+
+    // Wywołanie metody render
+    thisBooking.render();
+
+    // Wywołanie metody initWidgets
+    thisBooking.initWidgets();
   }
 
-  render(element) {
-    this.dom = {};
-    this.dom.wrapper = element;
-    this.dom.peopleAmount = document.querySelector(select.booking.peopleAmount);
-    this.dom.hoursAmount = document.querySelector(select.booking.hoursAmount);
+  render() {
+    const thisBooking = this;
 
-    // Rest of the render method...
+    // Wygenerowanie kodu HTML za pomocą szablonu templates.bookingWidget
+    const generatedHTML = templates.bookingWidget();
+
+    // Utworzenie pustego obiektu thisBooking.dom
+    thisBooking.dom = {};
+
+    // Przypisanie referencji do kontenera do właściwości thisBooking.dom.wrapper
+    thisBooking.dom.wrapper = document.createElement("div");
+    thisBooking.dom.wrapper.innerHTML = generatedHTML;
+
+    // Zmiana zawartości kontenera na wygenerowany kod HTML
+    thisBooking.dom.wrapper.innerHTML = generatedHTML; // Poprawiono to przypisanie
   }
 
   initWidgets() {
-    this.peopleAmountWidget = new AmountWidget(this.dom.peopleAmount);
-    this.hoursAmountWidget = new AmountWidget(this.dom.hoursAmount);
-
-    // Rest of the initWidgets method...
+    // Tu zostanie zaimplementowana logika inicjalizacji interaktywnych widgetów
   }
-
-  // Rest of the Booking class...
 }
 
 export default Booking;
